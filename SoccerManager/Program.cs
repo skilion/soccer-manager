@@ -37,6 +37,7 @@ namespace SoccerManager
             app.UseHttpsRedirection();
             app.UseAuthorization();
             app.MapControllers();
+            app.UseHttpLogging();
         }
 
         private static void EnsureDbExists(WebApplication app)

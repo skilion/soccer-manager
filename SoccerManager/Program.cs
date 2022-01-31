@@ -43,6 +43,7 @@ namespace SoccerManager
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+                app.UseDeveloperExceptionPage();
                 EnsureDbExists(app);
             }
 

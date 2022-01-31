@@ -9,6 +9,13 @@ namespace SoccerManager.Controllers
     [Consumes("application/json")]
     public class UsersController : Controller
     {
+        private readonly SoccerManagerDbContext context;
+
+        public UsersController(SoccerManagerDbContext context)
+        {
+            this.context = context;
+        }
+
         /// <summary>
         /// Authenticates an user
         /// </summary>

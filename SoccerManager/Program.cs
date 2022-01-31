@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace SoccerManager
 {
@@ -17,12 +18,23 @@ namespace SoccerManager
         {
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
 
             // Add SQLite as database context
             builder.Services.AddDbContext<SoccerManagerDbContext>(
                 options => options.UseSqlite(builder.Configuration.GetConnectionString("SQLite"))
             );
+
+            AddSwaggerGen(builder);
+        }
+
+        private static void AddSwaggerGen(WebApplicationBuilder builder)
+        {
+            builder.Services.AddSwaggerGen(options =>
+            {
+                // Add documentation from XML comments
+                var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+            });
         }
 
         private static void RegisterMiddleware(WebApplication app)

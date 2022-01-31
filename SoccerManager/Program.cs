@@ -22,6 +22,12 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    // Ensure the database exists
+    var scope = app.Services.CreateScope();
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<SoccerManagerDbContext>();
+    context.Database.EnsureCreated();
 }
 
 app.UseHttpsRedirection();

@@ -1,4 +1,4 @@
-﻿namespace ToptalProject.Models
+﻿namespace SoccerManager.Models
 {
     public enum PlayerRole
     {

@@ -1,6 +1,4 @@
-﻿using ToptalProject.Models;
-
-namespace SoccerManager.Models
+﻿namespace SoccerManager.Models
 {
     public class User
     {

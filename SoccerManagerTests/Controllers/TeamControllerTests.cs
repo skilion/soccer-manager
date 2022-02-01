@@ -34,7 +34,7 @@ namespace SoccerManagerTests.Controllers
             testUser = new User
             {
                 Email = "test@example.com",
-                Password = "test",
+                PasswordHash = "test",
                 Team = testTeam
             };
             context.Players.Add(testPlayer);

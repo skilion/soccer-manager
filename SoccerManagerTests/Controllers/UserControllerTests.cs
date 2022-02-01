@@ -1,4 +1,6 @@
-﻿using SoccerManager.Controllers;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using SoccerManager.Controllers;
 using SoccerManager.Models;
 using Xunit;
 
@@ -14,7 +16,10 @@ namespace SoccerManagerTests.Controllers
             // Arrange
             string email = "test@example.com";
             string pass = "test";
-            UsersController controller = new(context);
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();
+            UsersController controller = new(context, configuration);
 
             // Act
             controller.Register(new RegisterRequest()
@@ -22,14 +27,16 @@ namespace SoccerManagerTests.Controllers
                 Email = email,
                 Password = pass
             });
-
-            // Assert
             var response = controller.Authenticate(new AuthRequest()
             {
                 Email = email,
                 Password = pass
             });
-            Assert.NotEmpty(response.Bearer);
+
+            // Assert
+            var result = Assert.IsType<OkObjectResult>(response);
+            var authResponse = Assert.IsAssignableFrom<AuthResponse>(result.Value);
+            Assert.NotEmpty(authResponse.Bearer);
         }
     }
 }

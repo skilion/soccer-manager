@@ -73,7 +73,7 @@ namespace SoccerManager.Controllers
             context.Users.Add(new User()
             {
                 Email = registerRequest.Email,
-                Password = registerRequest.Password,
+                PasswordHash = BCrypt.Net.BCrypt.EnhancedHashPassword(registerRequest.Password),
                 Team = team
             });
             context.SaveChanges();
@@ -88,7 +88,7 @@ namespace SoccerManager.Controllers
             {
                 return false;
             }
-            if (user.Single().Password != request.Password)
+            if (!BCrypt.Net.BCrypt.EnhancedVerify(request.Password, user.Single().PasswordHash))
             {
                 return false;
             }

@@ -1,19 +1,28 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using SoccerManager.Models;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace SoccerManager.Controllers
 {
+    [AllowAnonymous]
     [ApiController]
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
     [Produces("application/json")]
     [Consumes("application/json")]
-    public class UsersController : Controller
+    public class UsersController : ControllerBase
     {
         private readonly SoccerManagerDbContext context;
+        private readonly SymmetricSecurityKey jwtIssuerKey;
 
-        public UsersController(SoccerManagerDbContext context)
+        public UsersController(SoccerManagerDbContext context, IConfiguration configuration)
         {
             this.context = context;
+            string issuerSigningKey = configuration["JwtSettings:IssuerSigningKey"];
+            jwtIssuerKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(issuerSigningKey));
         }
 
         /// <summary>
@@ -22,14 +31,22 @@ namespace SoccerManager.Controllers
         /// <returns>A JWT bearer token</returns>
         /// <response code="400">Bad Request</response>
         /// <response code="401">Wrong email or password</response>
+        /// <response code="500">Internal Server Error</response>
         [HttpPost]
-        [Route("Authenticate")]
-        public AuthResponse Authenticate([FromBody] AuthRequest authRequest)
+        public IActionResult Authenticate([FromBody] AuthRequest request)
         {
-            return new AuthResponse
+            if (!AuthenticateUser(request))
             {
-                Bearer = "token"
+                return StatusCode(StatusCodes.Status401Unauthorized);
+            }
+
+            var token = BuildJwtToken(request.Email);
+            var response = new AuthResponse
+            {
+                Bearer = token
             };
+
+            return Ok(response);   
         }
 
         /// <summary>
@@ -37,11 +54,60 @@ namespace SoccerManager.Controllers
         /// </summary>
         /// <returns>None</returns>
         /// <response code="400">Bad Request</response>
+        /// <response code="409">User exists already</response>
+        /// <response code="500">Internal Server Error</response>
         [HttpPost]
-        [Route("Register")]
-        public void Register([FromBody] RegisterRequest registerRequest)
+        public IActionResult Register([FromBody] RegisterRequest registerRequest)
         {
-            return;
+            if (context.Users.Where(user => user.Email == registerRequest.Email).Any())
+            {
+                return StatusCode(StatusCodes.Status409Conflict);
+            }
+
+            var team = new Team()
+            {
+                Name = "test",
+                Country = "test"
+            };
+            context.Teams.Add(team);
+            context.Users.Add(new User()
+            {
+                Email = registerRequest.Email,
+                Password = registerRequest.Password,
+                Team = team
+            });
+            context.SaveChanges();
+
+            return Ok();
+        }
+
+        private bool AuthenticateUser(AuthRequest request)
+        {
+            var user = context.Users.Where(user => user.Email == request.Email);
+            if (user.Count() != 1)
+            {
+                return false;
+            }
+            if (user.Single().Password != request.Password)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private string BuildJwtToken(string email)
+        {
+            var signinCredentials = new SigningCredentials(jwtIssuerKey, SecurityAlgorithms.HmacSha256);
+            var tokeOptions = new JwtSecurityToken(
+                claims: new List<Claim>()
+                {
+                    new Claim(ClaimTypes.Email, email),
+                },
+                expires: DateTime.Now.AddMinutes(30),
+                signingCredentials: signinCredentials
+            );
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+            return tokenString;
         }
     }
 }

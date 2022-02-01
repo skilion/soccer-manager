@@ -1,5 +1,9 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
+using System.Text;
 
 namespace SoccerManager
 {
@@ -19,12 +23,20 @@ namespace SoccerManager
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
 
+            builder.Services.AddAuthorization(options =>
+            {
+                options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+            });
+
             // Add SQLite as database context
             builder.Services.AddDbContext<SoccerManagerDbContext>(
                 options => options.UseSqlite(builder.Configuration.GetConnectionString("SQLite"))
             );
 
             AddSwaggerGen(builder);
+            AddJwtBearer(builder);
         }
 
         private static void AddSwaggerGen(WebApplicationBuilder builder)
@@ -34,7 +46,50 @@ namespace SoccerManager
                 // Add documentation from XML comments
                 var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+                
+                // Add JWT Authorization
+                options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme {
+                    Name = "Authorization",
+                    Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+                    Description = "JWT Authorization header using the Bearer scheme."
+                });
+                options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+                {
+                    {
+                        new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                        {
+                            Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                            {
+                                Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
             });
+        }
+
+        private static void AddJwtBearer(WebApplicationBuilder builder)
+        {
+            builder.Services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(
+                    JwtBearerDefaults.AuthenticationScheme,
+                    options =>
+                    {
+                        options.TokenValidationParameters = new()
+                        {
+                            ValidateAudience = false,
+                            ValidateIssuer = false,
+                            ValidateLifetime = true,
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:IssuerSigningKey"]))
+                        };
+                    }
+                );
         }
 
         private static void RegisterMiddleware(WebApplication app)
@@ -47,9 +102,11 @@ namespace SoccerManager
                 EnsureDbExists(app);
             }
 
-            app.UseHttpsRedirection();
+            app.UseRouting();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.MapDefaultControllerRoute();
+            app.UseHttpsRedirection();
             app.UseHttpLogging();
         }
 

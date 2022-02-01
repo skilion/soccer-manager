@@ -2,7 +2,7 @@
 
 namespace SoccerManager.Models
 {
-    [Index(nameof(Email))]
+    [Index(nameof(Email), IsUnique = true)]
     public class User
     {
         public int UserId { get; set; }

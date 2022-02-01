@@ -7,7 +7,7 @@ namespace SoccerManager
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Team> Teams { get; set; }
-        public DbSet<Player> Player { get; set; }
+        public DbSet<Player> Players { get; set; }
         public DbSet<Transfer> Transfers { get; set; }
 
         public SoccerManagerDbContext(DbContextOptions<SoccerManagerDbContext> options) : base(options)
@@ -18,6 +18,7 @@ namespace SoccerManager
         {
             modelBuilder.Entity<User>().ToTable("User");
             modelBuilder.Entity<Team>().ToTable("Team");
+            modelBuilder.Entity<Player>().ToTable("Player");
             modelBuilder.Entity<Transfer>().ToTable("Transfer");
         }
     }

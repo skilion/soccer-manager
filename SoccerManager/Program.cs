@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using SoccerManager.Helpers;
 using System.Reflection;
 using System.Text;
 
@@ -20,6 +21,7 @@ namespace SoccerManager
 
         private static void AddServices(WebApplicationBuilder builder)
         {
+            builder.Services.AddSingleton<ITeamGenerator, TeamGenerator>();
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
 

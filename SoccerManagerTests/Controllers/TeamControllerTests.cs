@@ -24,7 +24,7 @@ namespace SoccerManagerTests.Controllers
                 FirstName = "test",
                 LastName = "test",
                 Country = "test",
-                BirthDate = new DateOnly(2000, 1, 1)
+                BirthDate = new DateTime(2000, 1, 1)
             };
             testTeam = new Team
             {

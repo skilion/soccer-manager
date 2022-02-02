@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using SoccerManager.Helpers;
 using SoccerManager.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -16,11 +17,13 @@ namespace SoccerManager.Controllers
     public class UsersController : ControllerBase
     {
         private readonly SoccerManagerDbContext context;
+        private readonly ITeamGenerator teamGenerator;
         private readonly SymmetricSecurityKey jwtIssuerKey;
 
-        public UsersController(SoccerManagerDbContext context, IConfiguration configuration)
+        public UsersController(SoccerManagerDbContext context, ITeamGenerator teamGenerator, IConfiguration configuration)
         {
             this.context = context;
+            this.teamGenerator = teamGenerator;
             string issuerSigningKey = configuration["JwtSettings:IssuerSigningKey"];
             jwtIssuerKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(issuerSigningKey));
         }
@@ -64,18 +67,14 @@ namespace SoccerManager.Controllers
                 return StatusCode(StatusCodes.Status409Conflict);
             }
 
-            var team = new Team()
-            {
-                Name = "test",
-                Country = "test"
-            };
-            context.Teams.Add(team);
-            context.Users.Add(new User()
+            User user = new()
             {
                 Email = registerRequest.Email,
                 PasswordHash = BCrypt.Net.BCrypt.EnhancedHashPassword(registerRequest.Password),
-                Team = team
-            });
+                Team = teamGenerator.Generate()
+            };
+
+            context.Users.Add(user);
             context.SaveChanges();
 
             return Ok();

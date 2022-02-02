@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SoccerManager.Controllers;
 using SoccerManager.Models;
+using SoccerManagerTests.Stubs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using Xunit;
 
 namespace SoccerManagerTests.Controllers
 {
-    public class TeamControllerTests
+    public class TeamControllerTests : IDisposable
     {
         private readonly SoccerManagerDbContextStub context = new();
 
@@ -41,6 +42,11 @@ namespace SoccerManagerTests.Controllers
             context.Teams.Add(testTeam);
             context.Users.Add(testUser);
             context.SaveChanges();
+        }
+
+        public void Dispose()
+        {
+            context.Dispose();
         }
 
         [Fact]

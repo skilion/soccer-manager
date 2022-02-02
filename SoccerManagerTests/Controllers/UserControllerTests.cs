@@ -2,13 +2,19 @@
 using Microsoft.Extensions.Configuration;
 using SoccerManager.Controllers;
 using SoccerManager.Models;
+using SoccerManagerTests.Stubs;
 using Xunit;
 
 namespace SoccerManagerTests.Controllers
 {
-    public class UsersControllerTest
+    public class UsersControllerTest : IDisposable
     {
         private readonly SoccerManagerDbContextStub context = new();
+
+        public void Dispose()
+        {
+            context.Dispose();
+        }
 
         [Fact]
         public void ShouldCreateNewUserAndAuthenticate()

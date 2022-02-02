@@ -4,6 +4,7 @@ using SoccerManager.Controllers;
 using SoccerManager.Models;
 using SoccerManagerTests.Stubs;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace SoccerManagerTests.Controllers
@@ -200,6 +201,42 @@ namespace SoccerManagerTests.Controllers
 
             // Act
             var response = controller.Buy(player2.PlayerId);
+
+            // Assert
+            Assert.IsType<ForbidResult>(response);
+        }
+
+        [Fact]
+        public void SellShouldCreateTransferRecord()
+        {
+            // Arrange
+            controller.SetUserEmail(email1);
+            SellRequest request = new()
+            {
+                AskPrice = 10
+            };
+
+            // Act
+            var response = controller.Sell(player1.PlayerId, request);
+
+            // Assert
+            Assert.IsType<OkResult>(response);
+            var transfer = context.Transfers.Where(transfer => transfer.PlayerId == player1.PlayerId);
+            Assert.Equal(1, transfer.Count());
+        }
+
+        [Fact]
+        public void SellShouldFrobidForOtherUserPlayer()
+        {
+            // Arrange
+            controller.SetUserEmail(email1);
+            SellRequest request = new()
+            {
+                AskPrice = 10
+            };
+
+            // Act
+            var response = controller.Sell(player2.PlayerId, request);
 
             // Assert
             Assert.IsType<ForbidResult>(response);

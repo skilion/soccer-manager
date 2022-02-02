@@ -4,20 +4,12 @@ using System;
 
 namespace SoccerManagerTests.Stubs
 {
-    internal class SoccerManagerDbContextStub : SoccerManagerDbContext, IDisposable
+    internal class SoccerManagerDbContextStub : SoccerManagerDbContext
     {
-        private static readonly string databaseName = "TestDatabase";
-
         public SoccerManagerDbContextStub(): base(
             new DbContextOptionsBuilder<SoccerManagerDbContext>()
-            .UseInMemoryDatabase(databaseName).Options)
+            .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options)
         {
-        }
-
-        override public void Dispose()
-        {
-            Database.EnsureDeleted();
-            base.Dispose();
         }
     }
 }

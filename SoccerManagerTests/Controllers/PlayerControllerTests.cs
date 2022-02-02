@@ -7,7 +7,7 @@ using Xunit;
 
 namespace SoccerManagerTests.Controllers
 {
-    public class PlayerControllerTests : IDisposable
+    public class PlayerControllerTests
     {
         private readonly SoccerManagerDbContextStub context = new();
         private readonly PlayerController controller;
@@ -15,11 +15,6 @@ namespace SoccerManagerTests.Controllers
         public PlayerControllerTests()
         {
             controller = new PlayerController(context);
-        }
-
-        public void Dispose()
-        {
-            context.Dispose();
         }
 
         [Fact]

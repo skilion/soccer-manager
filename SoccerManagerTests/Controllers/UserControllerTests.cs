@@ -3,12 +3,11 @@ using Microsoft.Extensions.Configuration;
 using SoccerManager.Controllers;
 using SoccerManager.Models;
 using SoccerManagerTests.Stubs;
-using System;
 using Xunit;
 
 namespace SoccerManagerTests.Controllers
 {
-    public class UsersControllerTest : IDisposable
+    public class UsersControllerTest
     {
         private readonly SoccerManagerDbContextStub context = new();
         private readonly TeamGeneratorStub teamGenerator = new();
@@ -20,12 +19,7 @@ namespace SoccerManagerTests.Controllers
                 .AddJsonFile("appsettings.json")
                 .Build();
         }
-
-        public void Dispose()
-        {
-            context.Dispose();
-        }
-
+        
         [Fact]
         public void ShouldCreateNewUserAndAuthenticate()
         {

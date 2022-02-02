@@ -9,7 +9,7 @@ using Xunit;
 
 namespace SoccerManagerTests.Controllers
 {
-    public class TeamControllerTests : IDisposable
+    public class TeamControllerTests
     {
         private readonly SoccerManagerDbContextStub context = new();
 
@@ -42,11 +42,6 @@ namespace SoccerManagerTests.Controllers
             context.Teams.Add(testTeam);
             context.Users.Add(testUser);
             context.SaveChanges();
-        }
-
-        public void Dispose()
-        {
-            context.Dispose();
         }
 
         [Fact]

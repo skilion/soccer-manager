@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using SoccerManager;
 using SoccerManager.Controllers;
 using SoccerManager.Models;
 using SoccerManagerTests.Stubs;
-using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace SoccerManagerTests.Controllers
@@ -13,25 +13,23 @@ namespace SoccerManagerTests.Controllers
         private readonly SoccerManagerDbContextStub context = new();
         private readonly PlayerController controller;
 
+        private readonly string email1 = "test1@example.com";
+        private readonly string email2 = "test2@example.com";
+
+        private Player player1, player2;
+        private Team team1, team2;
+
         public PlayerControllerTests()
         {
             controller = new PlayerController(context);
+            AddTestUsers();
         }
 
         [Fact]
         public void ShouldReturnPlayer()
         {
             // Arrange
-            int playerId = 1;
-            Player player = new()
-            {
-                PlayerId = playerId,
-                FirstName = "test",
-                LastName = "test",
-                Country = "test"
-            };
-            context.Players.Add(player);
-            context.SaveChanges();
+            int playerId = player1.PlayerId;
 
             // Act
             var response = controller.Get(playerId);
@@ -39,15 +37,14 @@ namespace SoccerManagerTests.Controllers
             // Assert
             var result = Assert.IsType<OkObjectResult>(response);
             var resultPlayer = Assert.IsAssignableFrom<Player>(result.Value);
-            Assert.Equal(player.PlayerId, resultPlayer.PlayerId);
-            Assert.Equal(player.FirstName, resultPlayer.FirstName);
+            Assert.Equal(player1.FirstName, resultPlayer.FirstName);
         }
 
         [Fact]
         public void ShouldReturnNotFound()
         {
             // Arrange
-            int playerId = 1;
+            int playerId = 100;
 
             // Act
             var response = controller.Get(playerId);
@@ -60,39 +57,16 @@ namespace SoccerManagerTests.Controllers
         public void ShouldEditPlayer()
         {
             // Arrange
-            string email = "test@example.com";
-            int playerId = 1;
-            Player player = new()
-            {
-                PlayerId = playerId,
-                FirstName = "test",
-                LastName = "test",
-                Country = "test"
-            };
-            User user = new()
-            {
-                Email = email,
-                PasswordHash = "test",
-                Team = new Team()
-                {
-                    Name = "Name",
-                    Country = "Country",
-                    Players = new Player[] { player }
-                }
-            };
             EditPlayerRequest request = new()
             {
                 FirstName = "new",
                 LastName = "new",
                 Country = "new"
             };
-
-            context.Users.Add(user);
-            context.SaveChanges();
-            controller.SetUserEmail(email);
+            controller.SetUserEmail(email1);
 
             // Act
-            var response = controller.Post(playerId, request);
+            var response = controller.Post(player1.PlayerId, request);
 
             // Assert
             var result = Assert.IsType<OkObjectResult>(response);
@@ -100,67 +74,180 @@ namespace SoccerManagerTests.Controllers
             Assert.Equal(request.FirstName, playerResult.FirstName);
             Assert.Equal(request.LastName, playerResult.LastName);
             Assert.Equal(request.Country, playerResult.Country);
-            Assert.Equal(request.FirstName, player.FirstName);
-            Assert.Equal(request.LastName, player.LastName);
-            Assert.Equal(request.Country, player.Country);
+            Assert.Equal(request.FirstName, player1.FirstName);
+            Assert.Equal(request.LastName, player1.LastName);
+            Assert.Equal(request.Country, player1.Country);
         }
 
         [Fact]
         public void ShouldRejectEditPlayerOfOtherUser()
         {
             // Arrange
-            string email1 = "test1@example.com";
-            string email2 = "test2@example.com";
-            int playerId1 = 1;
-            int playerId2 = 2;
-            Player player1 = new()
-            {
-                PlayerId = playerId1,
-                FirstName = "test",
-                LastName = "test",
-                Country = "test"
-            };
-            Player player2 = new()
-            {
-                PlayerId = playerId2,
-                FirstName = "test",
-                LastName = "test",
-                Country = "test"
-            };
-            User user1 = new()
-            {
-                Email = email1,
-                PasswordHash = "test",
-                Team = new Team()
-                {
-                    Name = "Name",
-                    Country = "Country",
-                    Players = new Player[] { player1 }
-                }
-            };
-            User user2 = new()
-            {
-                Email = email2,
-                PasswordHash = "test",
-                Team = new Team()
-                {
-                    Name = "Name",
-                    Country = "Country",
-                    Players = new Player[] { player2 }
-                }
-            };
-
-            context.Users.Add(user1);
-            context.Users.Add(user2);
-            context.SaveChanges();
             controller.SetUserEmail(email1);
 
             // Act
-            var response = controller.Post(playerId2, new EditPlayerRequest());
+            var response = controller.Post(player2.PlayerId, new EditPlayerRequest());
 
             // Assert
             Assert.IsType<UnauthorizedResult>(response);
         }
 
+        [Fact]
+        public void ShouldBuyPlayer()
+        {
+            // Arrange
+            controller.SetUserEmail(email1);
+            context.Transfers.Add(new Transfer()
+            {
+                PlayerId = player2.PlayerId,
+                AskPrice = 10
+            });
+            context.SaveChanges();
+
+            // Act
+            var response = controller.Buy(player2.PlayerId);
+
+            // Assert
+            Assert.IsType<OkResult>(response);
+        }
+
+        [Fact]
+        public void BuyIncreasesPlayerValue()
+        {
+            // Arrange
+            controller.SetUserEmail(email1);
+            int initialPlayerValue = player2.Value;
+            context.Transfers.Add(new Transfer()
+            {
+                PlayerId = player2.PlayerId,
+                AskPrice = 10
+            });
+            context.SaveChanges();
+
+            // Act
+            var response = controller.Buy(player2.PlayerId);
+
+            // Assert
+            Assert.IsType<OkResult>(response);
+            Assert.True(player2.Value > initialPlayerValue);
+        }
+
+        [Fact]
+        public void ShouldBuyPlayerAndUpdateTeamMoney()
+        {
+            // Arrange
+            controller.SetUserEmail(email1);
+            int teamMoney1 = team1.Money;
+            int teamMoney2 = team2.Money;
+            int askPrice = 10;
+            context.Transfers.Add(new Transfer()
+            {
+                PlayerId = player2.PlayerId,
+                AskPrice = askPrice
+            });
+            context.SaveChanges();
+
+            // Act
+            var response = controller.Buy(player2.PlayerId);
+
+            // Assert
+            Assert.Equal(teamMoney1 - askPrice, team1.Money);
+            Assert.Equal(teamMoney2 + askPrice, team2.Money);
+        }
+
+        [Fact]
+        public void ShouldBuyPlayerAndUpdateOwnership()
+        {
+            // Arrange
+            controller.SetUserEmail(email1);
+            context.Transfers.Add(new Transfer()
+            {
+                PlayerId = player2.PlayerId,
+                AskPrice = 10
+            });
+            context.SaveChanges();
+
+            // Act
+            var response = controller.Buy(player2.PlayerId);
+
+            // Assert
+            Assert.Equal(team1.TeamId, player2.TeamId);
+        }
+
+        [Fact]
+        public void ShouldForbidBuyIfNotEnoughMoney()
+        {
+            // Arrange
+            controller.SetUserEmail(email1);
+            context.Transfers.Add(new Transfer()
+            {
+                PlayerId = player2.PlayerId,
+                AskPrice = 1000
+            });
+
+            // Act
+            var response = controller.Buy(player2.PlayerId);
+
+            // Assert
+            Assert.IsType<ForbidResult>(response);
+        }
+
+        [Fact]
+        public void ShouldForbidBuyOfPlayerNotOnSale()
+        {
+            // Arrange
+            controller.SetUserEmail(email1);
+
+            // Act
+            var response = controller.Buy(player2.PlayerId);
+
+            // Assert
+            Assert.IsType<ForbidResult>(response);
+        }
+
+        private void AddTestUsers()
+        {
+            player1 = new Player()
+            {
+                FirstName = "test",
+                LastName = "test",
+                Country = "test",
+                Value = 10
+            };
+            team1 = new Team()
+            {
+                Name = "Name",
+                Country = "Country",
+                Money = 100,
+                Players = new List<Player> { player1 }
+            };
+            player2 = new Player()
+            {
+                FirstName = "test",
+                LastName = "test",
+                Country = "test",
+                Value = 10
+            };
+            team2 = new Team()
+            {
+                Name = "Name",
+                Country = "Country",
+                Money = 100,
+                Players = new List<Player> { player2 }
+            };
+            context.Users.Add(new User()
+            {
+                Email = email1,
+                PasswordHash = "test",
+                Team = team1
+            });
+            context.Users.Add(new User()
+            {
+                Email = email2,
+                PasswordHash = "test",
+                Team = team2
+            });
+            context.SaveChanges();
+        }
     }
 }

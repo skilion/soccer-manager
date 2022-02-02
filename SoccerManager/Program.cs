@@ -90,7 +90,6 @@ namespace SoccerManager
                         {
                             ValidateAudience = false,
                             ValidateIssuer = false,
-                            ValidateLifetime = true,
                             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:IssuerSigningKey"]))
                         };
                     }

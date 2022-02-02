@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using SoccerManager.Helpers;
 using System.Reflection;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace SoccerManager
 {
@@ -22,7 +23,9 @@ namespace SoccerManager
         private static void AddServices(WebApplicationBuilder builder)
         {
             builder.Services.AddSingleton<ITeamGenerator, TeamGenerator>();
-            builder.Services.AddControllers();
+            builder.Services
+                .AddControllers()
+                .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
             builder.Services.AddEndpointsApiExplorer();
 
             builder.Services.AddAuthorization(options =>

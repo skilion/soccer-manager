@@ -27,7 +27,7 @@ namespace SoccerManagerTests.Controllers
         }
 
         [Fact]
-        public void ShouldReturnPlayer()
+        public void GetShouldReturnPlayer()
         {
             // Arrange
             int playerId = player1.PlayerId;
@@ -42,7 +42,7 @@ namespace SoccerManagerTests.Controllers
         }
 
         [Fact]
-        public void ShouldReturnNotFound()
+        public void GetShouldReturnNotFoundForInvalidPlayer()
         {
             // Arrange
             int playerId = 100;
@@ -55,7 +55,7 @@ namespace SoccerManagerTests.Controllers
         }
 
         [Fact]
-        public void ShouldEditPlayer()
+        public void PostShouldUpdatePlayer()
         {
             // Arrange
             EditPlayerRequest request = new()
@@ -81,7 +81,7 @@ namespace SoccerManagerTests.Controllers
         }
 
         [Fact]
-        public void ShouldRejectEditPlayerOfOtherUser()
+        public void PostShouldRejectForOtherUserPlayer()
         {
             // Arrange
             controller.SetUserEmail(email1);
@@ -94,26 +94,7 @@ namespace SoccerManagerTests.Controllers
         }
 
         [Fact]
-        public void ShouldBuyPlayer()
-        {
-            // Arrange
-            controller.SetUserEmail(email1);
-            context.Transfers.Add(new Transfer()
-            {
-                PlayerId = player2.PlayerId,
-                AskPrice = 10
-            });
-            context.SaveChanges();
-
-            // Act
-            var response = controller.Buy(player2.PlayerId);
-
-            // Assert
-            Assert.IsType<OkResult>(response);
-        }
-
-        [Fact]
-        public void BuyIncreasesPlayerValue()
+        public void BuyShouldIncreasePlayerValue()
         {
             // Arrange
             controller.SetUserEmail(email1);
@@ -134,7 +115,7 @@ namespace SoccerManagerTests.Controllers
         }
 
         [Fact]
-        public void ShouldBuyPlayerAndUpdateTeamMoney()
+        public void BuyShouldUpdateTeamMoney()
         {
             // Arrange
             controller.SetUserEmail(email1);
@@ -157,7 +138,7 @@ namespace SoccerManagerTests.Controllers
         }
 
         [Fact]
-        public void ShouldBuyPlayerAndUpdateOwnership()
+        public void BuyShouldUpdateOwnership()
         {
             // Arrange
             controller.SetUserEmail(email1);
@@ -176,7 +157,7 @@ namespace SoccerManagerTests.Controllers
         }
 
         [Fact]
-        public void ShouldForbidBuyIfNotEnoughMoney()
+        public void BuyShouldForbidIfNotEnoughMoney()
         {
             // Arrange
             controller.SetUserEmail(email1);
@@ -194,7 +175,7 @@ namespace SoccerManagerTests.Controllers
         }
 
         [Fact]
-        public void ShouldForbidBuyOfPlayerNotOnSale()
+        public void BuyShouldForbidForPlayerNotOnSale()
         {
             // Arrange
             controller.SetUserEmail(email1);

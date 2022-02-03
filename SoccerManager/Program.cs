@@ -102,16 +102,16 @@ namespace SoccerManager
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
-                app.UseDeveloperExceptionPage();
                 EnsureDbExists(app);
             }
+
+            app.UseHttpsRedirection();
+            app.UseHttpLogging();
 
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.MapDefaultControllerRoute();
-            app.UseHttpsRedirection();
-            app.UseHttpLogging();
+            app.MapControllers();
         }
 
         private static void EnsureDbExists(WebApplication app)

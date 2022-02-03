@@ -22,7 +22,6 @@ namespace SoccerManager.Models
         public string LastName { get; set; } = "";
         [Required]
         public string Country { get; set; } = "";
-        [JsonIgnore]
         public DateTime BirthDate { get; set; }
         public PlayerRole Role { get; set; }
         public int Value { get; set; }

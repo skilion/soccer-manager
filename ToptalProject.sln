@@ -3,12 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoccerManager", "SoccerManager\SoccerManager.csproj", "{B600FAF3-CAAD-49C2-A86C-B17E19A630BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoccerManager", "SoccerManager\SoccerManager.csproj", "{B600FAF3-CAAD-49C2-A86C-B17E19A630BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoccerManagerTests", "SoccerManagerTests\SoccerManagerTests.csproj", "{FAC0A7F6-C6D1-41EF-A23D-62D74195E51A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoccerManagerTests", "SoccerManagerTests\SoccerManagerTests.csproj", "{FAC0A7F6-C6D1-41EF-A23D-62D74195E51A}"
 	ProjectSection(ProjectDependencies) = postProject
 		{B600FAF3-CAAD-49C2-A86C-B17E19A630BB} = {B600FAF3-CAAD-49C2-A86C-B17E19A630BB}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoccerManagerIntegrationTests", "SoccerManagerIntegrationTests\SoccerManagerIntegrationTests.csproj", "{D385015C-EC33-4509-A503-1A66E76EC1D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,6 +26,10 @@ Global
 		{FAC0A7F6-C6D1-41EF-A23D-62D74195E51A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAC0A7F6-C6D1-41EF-A23D-62D74195E51A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FAC0A7F6-C6D1-41EF-A23D-62D74195E51A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D385015C-EC33-4509-A503-1A66E76EC1D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D385015C-EC33-4509-A503-1A66E76EC1D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D385015C-EC33-4509-A503-1A66E76EC1D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D385015C-EC33-4509-A503-1A66E76EC1D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

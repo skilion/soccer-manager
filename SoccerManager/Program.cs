@@ -10,7 +10,7 @@ using System.Text.Json.Serialization;
 
 namespace SoccerManager
 {
-    public static class Program
+    public class Program
     {
         public static void Main(string[] args)
         {

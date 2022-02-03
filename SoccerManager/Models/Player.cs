@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace SoccerManager.Models
 {
@@ -13,6 +14,7 @@ namespace SoccerManager.Models
     public class Player
     {
         public int PlayerId { get; set; }
+        [JsonIgnore]
         public int TeamId { get; set; }
         [Required]
         public string FirstName { get; set; } = "";
@@ -20,6 +22,7 @@ namespace SoccerManager.Models
         public string LastName { get; set; } = "";
         [Required]
         public string Country { get; set; } = "";
+        [JsonIgnore]
         public DateTime BirthDate { get; set; }
         public PlayerRole Role { get; set; }
         public int Value { get; set; }

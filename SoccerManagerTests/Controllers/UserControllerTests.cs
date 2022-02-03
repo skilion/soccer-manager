@@ -11,7 +11,7 @@ namespace SoccerManagerTests.Controllers
         private readonly SoccerManagerDbContextStub context = new();
         private readonly TeamGeneratorStub teamGenerator = new();
         private readonly JwtGeneratorStub jwtGenerator = new();
-        private readonly UsersController controller;
+        private readonly UserController controller;
 
         public UsersControllerTest()
         {

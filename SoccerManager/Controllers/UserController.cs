@@ -11,13 +11,13 @@ namespace SoccerManager.Controllers
     [Produces("application/json")]
     [Consumes("application/json")]
     [ProducesErrorResponseType(typeof(void))]
-    public class UsersController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly SoccerManagerDbContext context;
         private readonly ITeamGenerator teamGenerator;
         private readonly IJwtGenerator jwtGenerator;
 
-        public UsersController(SoccerManagerDbContext context, ITeamGenerator teamGenerator, IJwtGenerator tokenGenerator)
+        public UserController(SoccerManagerDbContext context, ITeamGenerator teamGenerator, IJwtGenerator tokenGenerator)
         {
             this.context = context;
             this.teamGenerator = teamGenerator;

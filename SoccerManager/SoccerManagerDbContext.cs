@@ -5,10 +5,10 @@ namespace SoccerManager
 {
     public class SoccerManagerDbContext: DbContext
     {
-        public DbSet<User> Users { get; set; }
-        public DbSet<Team> Teams { get; set; }
-        public DbSet<Player> Players { get; set; }
-        public DbSet<Transfer> Transfers { get; set; }
+        public DbSet<User> Users => Set<User>();
+        public DbSet<Team> Teams => Set<Team>();
+        public DbSet<Player> Players => Set<Player>();
+        public DbSet<Transfer> Transfers => Set<Transfer>();
 
         public SoccerManagerDbContext(DbContextOptions<SoccerManagerDbContext> options) : base(options)
         {

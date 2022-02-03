@@ -24,10 +24,10 @@ namespace SoccerManager.Helpers
 
         private readonly Random random = new();
 
-        private string[] countries;
-        private string[] firstnames;
-        private string[] surnames;
-        private string[] teams;
+        private string[] countries = null!;
+        private string[] firstnames = null!;
+        private string[] surnames = null!;
+        private string[] teams = null!;
 
         public TeamGenerator()
         {

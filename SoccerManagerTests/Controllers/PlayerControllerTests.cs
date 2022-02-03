@@ -16,8 +16,10 @@ namespace SoccerManagerTests.Controllers
         private readonly string email1 = "test1@example.com";
         private readonly string email2 = "test2@example.com";
 
-        private Player player1, player2;
-        private Team team1, team2;
+        private Player player1 = null!;
+        private Player player2 = null!;
+        private Team team1 = null!;
+        private Team team2 = null!;
 
         public PlayerControllerTests()
         {

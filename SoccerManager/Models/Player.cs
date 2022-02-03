@@ -15,11 +15,11 @@ namespace SoccerManager.Models
         public int PlayerId { get; set; }
         public int TeamId { get; set; }
         [Required]
-        public string FirstName { get; set; }
+        public string FirstName { get; set; } = "";
         [Required]
-        public string LastName { get; set; }
+        public string LastName { get; set; } = "";
         [Required]
-        public string Country { get; set; }
+        public string Country { get; set; } = "";
         public DateTime BirthDate { get; set; }
         public PlayerRole Role { get; set; }
         public int Value { get; set; }

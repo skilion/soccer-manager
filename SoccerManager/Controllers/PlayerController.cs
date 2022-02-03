@@ -8,6 +8,7 @@ namespace SoccerManager.Controllers
     [Route("[controller]/{id}")]
     [Consumes("application/json")]
     [Produces("application/json")]
+    [ProducesErrorResponseType(typeof(void))]
     public class PlayerController : ControllerBase
     {
         private readonly SoccerManagerDbContext context;
@@ -24,13 +25,9 @@ namespace SoccerManager.Controllers
         /// <summary>
         /// Get the details of a player.
         /// </summary>
-        /// <returns>The details of the player</returns>
-        /// <response code="400">Bad Request</response>
-        /// <response code="401">Unauthorized</response>
-        /// <response code="404">Not Found</response>
-        /// <response code="500">Internal Server Error</response>
         [HttpGet]
         [ProducesResponseType(typeof(Player), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Get([FromRoute] int id)
         {
             var player = context.Players.Find(id);
@@ -42,15 +39,15 @@ namespace SoccerManager.Controllers
         }
 
         /// <summary>
-        /// Update the details of a player. The player must belong to the user.
+        /// Update the details of a player
         /// </summary>
-        /// <returns>The details of the player</returns>
-        /// <response code="400">Bad Request</response>
-        /// <response code="401">Unauthorized</response>
-        /// <response code="404">Not Found</response>
-        /// <response code="500">Internal Server Error</response>
+        /// <remarks>
+        /// The player must belong to the user
+        /// </remarks>
         [HttpPost]
         [ProducesResponseType(typeof(Player), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Post([FromRoute] int id, [FromBody] EditPlayerRequest request)
         {
             var player = context.Players.Find(id);
@@ -60,7 +57,7 @@ namespace SoccerManager.Controllers
             }
             if (!DoesPlayerBelongToCurrentUser(player))
             {
-                return Unauthorized();
+                return Forbid();
             }
             if (request.FirstName is not null)
             {
@@ -79,17 +76,18 @@ namespace SoccerManager.Controllers
         }
 
         /// <summary>
-        /// Buys a player. The player must be on the market and the user's team must have enough money.
-        /// If the user already owns the player, it is removed from the market.
+        /// Buys a player.
         /// </summary>
-        /// <response code="400">Bad Request</response>
-        /// <response code="401">Unauthorized</response>
-        /// <response code="403">Forbidden</response>
-        /// <response code="404">Not Found</response>
-        /// <response code="409">Conflict error while buying the player. Retry.</response>
-        /// <response code="500">Internal Server Error</response>
+        /// <remarks>
+        /// The player must be on the market and the user's team must have enough money.
+        /// If the user owns the player, the player is simply removed from the market.
+        /// </remarks>
         [HttpPost]
         [Route("Buy")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         public IActionResult Buy([FromRoute] int id)
         {
             var player = context.Players .Find(id);
@@ -112,15 +110,16 @@ namespace SoccerManager.Controllers
         }
 
         /// <summary>
-        /// Puts a player on the market. The player must belong to the user's team.
+        /// Puts a player on the market
         /// </summary>
-        /// <response code="400">Bad Request</response>
-        /// <response code="401">Unauthorized</response>
-        /// <response code="403">Forbidden</response>
-        /// <response code="404">Not Found</response>
-        /// <response code="500">Internal Server Error</response>
+        /// <remarks>
+        /// The player must belong to the user's team
+        /// </remarks>
         [HttpPost]
         [Route("Sell")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Sell([FromRoute] int id, SellRequest request)
         {
             var player = context.Players.Find(id);

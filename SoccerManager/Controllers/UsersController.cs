@@ -14,6 +14,7 @@ namespace SoccerManager.Controllers
     [Route("[controller]/[action]")]
     [Produces("application/json")]
     [Consumes("application/json")]
+    [ProducesErrorResponseType(typeof(void))]
     public class UsersController : ControllerBase
     {
         private readonly SoccerManagerDbContext context;
@@ -32,15 +33,14 @@ namespace SoccerManager.Controllers
         /// Authenticates an user
         /// </summary>
         /// <returns>A JWT bearer token</returns>
-        /// <response code="400">Bad Request</response>
-        /// <response code="401">Wrong email or password</response>
-        /// <response code="500">Internal Server Error</response>
         [HttpPost]
+        [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult Authenticate([FromBody] AuthRequest request)
         {
             if (!AuthenticateUser(request))
             {
-                return StatusCode(StatusCodes.Status401Unauthorized);
+                return Unauthorized();
             }
 
             var token = BuildJwtToken(request.Email);
@@ -55,11 +55,12 @@ namespace SoccerManager.Controllers
         /// <summary>
         /// Creates a new user
         /// </summary>
-        /// <returns>None</returns>
-        /// <response code="400">Bad Request</response>
-        /// <response code="409">User exists already</response>
-        /// <response code="500">Internal Server Error</response>
+        /// <remarks>
+        /// The user will have a random team generated
+        /// </remarks>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         public IActionResult Register([FromBody] RegisterRequest registerRequest)
         {
             if (context.Users.Where(user => user.Email == registerRequest.Email).Any())

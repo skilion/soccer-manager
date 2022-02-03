@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SoccerManager;
 using SoccerManager.Controllers;
 using SoccerManager.Models;
 using SoccerManagerTests.Stubs;
@@ -90,7 +89,7 @@ namespace SoccerManagerTests.Controllers
             var response = controller.Post(player2.PlayerId, new EditPlayerRequest());
 
             // Assert
-            Assert.IsType<UnauthorizedResult>(response);
+            Assert.IsType<ForbidResult>(response);
         }
 
         [Fact]

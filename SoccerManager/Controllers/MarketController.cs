@@ -20,9 +20,6 @@ namespace SoccerManager.Controllers
         /// <summary>
         /// Get the list of players on the market
         /// </summary>
-        /// <response code="400">Bad Request</response>
-        /// <response code="401">Unauthorized</response>
-        /// <response code="500">Internal Server Error</response>
         [HttpGet]
         [ProducesResponseType(typeof(List<Transfer>), StatusCodes.Status200OK)]
         public IActionResult Get()

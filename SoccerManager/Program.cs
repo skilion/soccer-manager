@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using SoccerManager.Helpers;
 using System.Reflection;
 using System.Text;
@@ -53,22 +54,19 @@ namespace SoccerManager
                 options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
                 
                 // Add JWT Authorization
-                options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme {
-                    Name = "Authorization",
-                    Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme {
+                    Type = SecuritySchemeType.Http,
                     Scheme = "Bearer",
                     BearerFormat = "JWT",
-                    In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-                    Description = "JWT Authorization header using the Bearer scheme."
                 });
-                options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
-                        new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                        new OpenApiSecurityScheme
                         {
-                            Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                            Reference = new OpenApiReference
                             {
-                                Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                                Type = ReferenceType.SecurityScheme,
                                 Id = "Bearer"
                             }
                         },

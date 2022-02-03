@@ -8,6 +8,7 @@ namespace SoccerManager.Controllers
     [Route("[controller]")]
     [Produces("application/json")]
     [Consumes("application/json")]
+    [ProducesErrorResponseType(typeof(void))]
     public class TeamController : ControllerBase
     {
         private readonly SoccerManagerDbContext context;
@@ -18,12 +19,8 @@ namespace SoccerManager.Controllers
         }
 
         /// <summary>
-        /// Get the user's team
+        /// Get the team of the team of the current user
         /// </summary>
-        /// <returns>The team of the authenticated user</returns>
-        /// <response code="400">Bad Request</response>
-        /// <response code="401">Unauthorized</response>
-        /// <response code="500">Internal Server Error</response>
         [HttpGet]
         [ProducesResponseType(typeof(Team), 200)]
         public IActionResult Get()
@@ -33,12 +30,9 @@ namespace SoccerManager.Controllers
         }
 
         /// <summary>
-        /// Edit the details of the user's team
+        /// Updates the details of the team of the current user
         /// </summary>
         /// <returns>The team of the authenticated user</returns>
-        /// <response code="400">Bad Request</response>
-        /// <response code="401">Unauthorized</response>
-        /// <response code="500">Internal Server Error</response>
         [HttpPost]
         [ProducesResponseType(typeof(Team), 200)]
         public IActionResult Post([FromBody] EditTeamRequest request)

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using SoccerManager.Controllers;
 using SoccerManager.Models;
 using SoccerManagerTests.Stubs;
@@ -11,13 +10,12 @@ namespace SoccerManagerTests.Controllers
     {
         private readonly SoccerManagerDbContextStub context = new();
         private readonly TeamGeneratorStub teamGenerator = new();
-        private readonly IConfiguration configuration;
+        private readonly JwtGeneratorStub jwtGenerator = new();
+        private readonly UsersController controller;
 
         public UsersControllerTest()
         {
-            configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
-                .Build();
+            controller = new(context, teamGenerator, jwtGenerator);
         }
         
         [Fact]
@@ -26,7 +24,6 @@ namespace SoccerManagerTests.Controllers
             // Arrange
             string email = "test@example.com";
             string pass = "test";
-            UsersController controller = new(context, teamGenerator, configuration);
 
             // Act
             controller.Register(new RegisterRequest()
@@ -52,7 +49,6 @@ namespace SoccerManagerTests.Controllers
             // Arrange
             string email = "test@example.com";
             string pass = "test";
-            UsersController controller = new(context, teamGenerator, configuration);
 
             // Act
             var response = controller.Register(new RegisterRequest()

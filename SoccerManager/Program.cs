@@ -24,29 +24,42 @@ namespace SoccerManager
         private static void AddServices(WebApplicationBuilder builder)
         {
             builder.Services.AddSingleton<ITeamGenerator, TeamGenerator>();
+            builder.Services.AddSingleton<IJwtGenerator, JwtGenerator>();
+
+            AddControllers(builder);
+            AddAuthorization(builder);
+            AddSQLiteDatabase(builder);
+            AddSwaggerGen(builder);
+            AddJwtBearer(builder);
+        }
+
+        private static void AddControllers(WebApplicationBuilder builder)
+        {
             builder.Services
                 .AddControllers()
                 .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
-            builder.Services.AddEndpointsApiExplorer();
+        }
 
+        private static void AddAuthorization(WebApplicationBuilder builder)
+        {
             builder.Services.AddAuthorization(options =>
             {
                 options.FallbackPolicy = new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
                     .Build();
             });
+        }
 
-            // Add SQLite as database context
+        private static void AddSQLiteDatabase(WebApplicationBuilder builder)
+        {
             builder.Services.AddDbContext<SoccerManagerDbContext>(
                 options => options.UseSqlite(builder.Configuration.GetConnectionString("SQLite"))
             );
-
-            AddSwaggerGen(builder);
-            AddJwtBearer(builder);
         }
 
         private static void AddSwaggerGen(WebApplicationBuilder builder)
         {
+            builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options =>
             {
                 // Add documentation from XML comments

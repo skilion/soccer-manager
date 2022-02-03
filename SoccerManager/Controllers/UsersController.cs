@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using SoccerManager.Helpers;
 using SoccerManager.Models;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace SoccerManager.Controllers
 {
@@ -19,14 +15,13 @@ namespace SoccerManager.Controllers
     {
         private readonly SoccerManagerDbContext context;
         private readonly ITeamGenerator teamGenerator;
-        private readonly SymmetricSecurityKey jwtIssuerKey;
+        private readonly IJwtGenerator jwtGenerator;
 
-        public UsersController(SoccerManagerDbContext context, ITeamGenerator teamGenerator, IConfiguration configuration)
+        public UsersController(SoccerManagerDbContext context, ITeamGenerator teamGenerator, IJwtGenerator tokenGenerator)
         {
             this.context = context;
             this.teamGenerator = teamGenerator;
-            string issuerSigningKey = configuration["JwtSettings:IssuerSigningKey"];
-            jwtIssuerKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(issuerSigningKey));
+            this.jwtGenerator = tokenGenerator;
         }
 
         /// <summary>
@@ -43,7 +38,7 @@ namespace SoccerManager.Controllers
                 return Unauthorized();
             }
 
-            var token = BuildJwtToken(request.Email);
+            var token = jwtGenerator.Generate(request.Email);
             var response = new AuthResponse
             {
                 Bearer = token
@@ -93,21 +88,6 @@ namespace SoccerManager.Controllers
                 return false;
             }
             return true;
-        }
-
-        private string BuildJwtToken(string email)
-        {
-            var signinCredentials = new SigningCredentials(jwtIssuerKey, SecurityAlgorithms.HmacSha256);
-            var tokeOptions = new JwtSecurityToken(
-                claims: new List<Claim>()
-                {
-                    new Claim(ClaimTypes.Email, email),
-                },
-                expires: DateTime.Now.AddMinutes(30),
-                signingCredentials: signinCredentials
-            );
-            var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
-            return tokenString;
         }
     }
 }

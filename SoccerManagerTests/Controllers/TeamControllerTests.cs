@@ -45,7 +45,7 @@ namespace SoccerManagerTests.Controllers
         }
 
         [Fact]
-        public void ShouldReturnTheUserTeam()
+        public void GetShouldReturnTheUserTeam()
         {
             // Arrange
             TeamController controller = new(context);
@@ -63,19 +63,19 @@ namespace SoccerManagerTests.Controllers
         }
 
         [Fact]
-        public void ShouldEditTheUserTeam()
+        public void PutShouldUpdateTheUserTeam()
         {
             // Arrange
             TeamController controller = new(context);
             controller.SetUserEmail(testUser.Email);
-            EditTeamRequest request = new()
+            UpdateTeamRequest request = new()
             {
                 Name = "new",
                 Country = "new"
             };
 
             // Act
-            var response = controller.Post(request);
+            var response = controller.Put(request);
 
             // Assert
             var result = Assert.IsType<OkObjectResult>(response);

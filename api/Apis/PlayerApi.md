@@ -4,9 +4,9 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**buyPlayer**](PlayerApi.md#buyPlayer) | **POST** /Player/{id}/Buy | Buys a player.
-[**editPlayer**](PlayerApi.md#editPlayer) | **POST** /Player/{id} | Update the details of a player
-[**getPlayer**](PlayerApi.md#getPlayer) | **GET** /Player/{id} | Get the details of a player.
+[**buyPlayer**](PlayerApi.md#buyPlayer) | **POST** /Player/{id}/Buy | Buys a player
+[**updatePlayer**](PlayerApi.md#updatePlayer) | **PUT** /Player/{id} | Update the details of a player
+[**getPlayer**](PlayerApi.md#getPlayer) | **GET** /Player/{id} | Get the details of a player
 [**sellPlayer**](PlayerApi.md#sellPlayer) | **POST** /Player/{id}/Sell | Puts a player on the market
 
 
@@ -14,9 +14,9 @@ Method | HTTP request | Description
 # **buyPlayer**
 > buyPlayer(id)
 
-Buys a player.
+Buys a player
 
-    The player must be on the market and the user&#39;s team must have enough money.  If the user owns the player, the player is simply removed from the market.
+    The player must be on the market and the user's team must have enough money.  If the user owns the player, the player is simply removed from the market.
 
 ### Parameters
 
@@ -37,9 +37,9 @@ null (empty response body)
 - **Content-Type**: Not defined
 - **Accept**: Not defined
 
-<a name="editPlayer"></a>
-# **editPlayer**
-> Player editPlayer(id, EditPlayerRequest)
+<a name="updatePlayer"></a>
+# **updatePlayer**
+> Player updatePlayer(id, updatePlayerRequest)
 
 Update the details of a player
 
@@ -50,7 +50,7 @@ Update the details of a player
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | **Integer**|  | [default to null]
- **EditPlayerRequest** | [**EditPlayerRequest**](../Models/EditPlayerRequest.md)|  | [optional]
+ **updatePlayerRequest** | [**updatePlayerRequest**](../Models/updatePlayerRequest.md)|  | [optional]
 
 ### Return type
 
@@ -96,7 +96,7 @@ Name | Type | Description  | Notes
 
 Puts a player on the market
 
-    The player must belong to the user&#39;s team
+    The player must belong to the user's team
 
 ### Parameters
 

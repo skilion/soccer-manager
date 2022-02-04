@@ -8,11 +8,11 @@ All URIs are relative to *http://localhost*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *MarketApi* | [**getMarketList**](Apis/MarketApi.md#getmarketlist) | **GET** /Market | Get the list of players on the market
-*PlayerApi* | [**buyPlayer**](Apis/PlayerApi.md#buyplayer) | **POST** /Player/{id}/Buy | Buys a player.
-*PlayerApi* | [**editPlayer**](Apis/PlayerApi.md#editplayer) | **POST** /Player/{id} | Update the details of a player
-*PlayerApi* | [**getPlayer**](Apis/PlayerApi.md#getplayer) | **GET** /Player/{id} | Get the details of a player.
+*PlayerApi* | [**buyPlayer**](Apis/PlayerApi.md#buyplayer) | **POST** /Player/{id}/Buy | Buys a player
+*PlayerApi* | [**updatePlayer**](Apis/PlayerApi.md#updateplayer) | **POST** /Player/{id} | Update the details of a player
+*PlayerApi* | [**getPlayer**](Apis/PlayerApi.md#getplayer) | **GET** /Player/{id} | Get the details of a player
 *PlayerApi* | [**sellPlayer**](Apis/PlayerApi.md#sellplayer) | **POST** /Player/{id}/Sell | Puts a player on the market
-*TeamApi* | [**editTeam**](Apis/TeamApi.md#editteam) | **POST** /Team | Updates the details of the team of the current user
+*TeamApi* | [**updateTeam**](Apis/TeamApi.md#updateteam) | **PUT** /Team | Updates the details of the team of the current user
 *TeamApi* | [**getTeam**](Apis/TeamApi.md#getteam) | **GET** /Team | Get the team of the team of the current user
 *UserApi* | [**authenticateUser**](Apis/UserApi.md#authenticateuser) | **POST** /User/Authenticate | Authenticates an user
 *UserApi* | [**registerUser**](Apis/UserApi.md#registeruser) | **POST** /User/Register | Creates a new user

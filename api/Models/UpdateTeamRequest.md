@@ -1,4 +1,4 @@
-# EditTeamRequest
+# UpdateTeamRequest
 ## Properties
 
 Name | Type | Description | Notes

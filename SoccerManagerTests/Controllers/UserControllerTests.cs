@@ -44,7 +44,7 @@ namespace SoccerManagerTests.Controllers
         }
 
         [Fact]
-        public void ShouldCreateUserWithTeam()
+        public void RegisterShouldCreateUserWithTeam()
         {
             // Arrange
             string email = "test@example.com";

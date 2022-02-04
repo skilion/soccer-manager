@@ -1,4 +1,4 @@
-# EditPlayerRequest
+# UpdatePlayerRequest
 ## Properties
 
 Name | Type | Description | Notes

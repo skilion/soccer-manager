@@ -33,9 +33,9 @@ namespace SoccerManager.Controllers
         /// Updates the details of the team of the current user
         /// </summary>
         /// <returns>The team of the authenticated user</returns>
-        [HttpPost(Name = "EditTeam")]
+        [HttpPut(Name = "UpdateTeam")]
         [ProducesResponseType(typeof(Team), 200)]
-        public IActionResult Post([FromBody] EditTeamRequest request)
+        public IActionResult Put([FromBody] UpdateTeamRequest request)
         {
             var team = LoadUserTeam();
             if (request.Name is not null)

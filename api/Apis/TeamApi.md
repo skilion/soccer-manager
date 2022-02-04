@@ -4,13 +4,13 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**editTeam**](TeamApi.md#editTeam) | **POST** /Team | Updates the details of the team of the current user
+[**updateTeam**](TeamApi.md#updateTeam) | **PUT** /Team | Updates the details of the team of the current user
 [**getTeam**](TeamApi.md#getTeam) | **GET** /Team | Get the team of the team of the current user
 
 
-<a name="editTeam"></a>
-# **editTeam**
-> Team editTeam(EditTeamRequest)
+<a name="updateTeam"></a>
+# **updateTeam**
+> Team updateTeam(updateTeamRequest)
 
 Updates the details of the team of the current user
 
@@ -18,7 +18,7 @@ Updates the details of the team of the current user
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **EditTeamRequest** | [**EditTeamRequest**](../Models/EditTeamRequest.md)|  | [optional]
+ **updateTeamRequest** | [**updateTeamRequest**](../Models/updateTeamRequest.md)|  | [optional]
 
 ### Return type
 

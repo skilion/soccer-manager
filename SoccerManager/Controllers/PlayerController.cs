@@ -23,7 +23,7 @@ namespace SoccerManager.Controllers
         }
 
         /// <summary>
-        /// Get the details of a player.
+        /// Get the details of a player
         /// </summary>
         [HttpGet(Name = "GetPlayer")]
         [ProducesResponseType(typeof(Player), StatusCodes.Status200OK)]
@@ -44,11 +44,11 @@ namespace SoccerManager.Controllers
         /// <remarks>
         /// The player must belong to the user
         /// </remarks>
-        [HttpPost(Name = "EditPlayer")]
+        [HttpPut(Name = "UpdatePlayer")]
         [ProducesResponseType(typeof(Player), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult Post([FromRoute] int id, [FromBody] EditPlayerRequest request)
+        public IActionResult Put([FromRoute] int id, [FromBody] UpdatePlayerRequest request)
         {
             var player = context.Players.Find(id);
             if (player is null)
@@ -76,7 +76,7 @@ namespace SoccerManager.Controllers
         }
 
         /// <summary>
-        /// Buys a player.
+        /// Buys a player
         /// </summary>
         /// <remarks>
         /// The player must be on the market and the user's team must have enough money.

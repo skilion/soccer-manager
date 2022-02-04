@@ -56,10 +56,10 @@ namespace SoccerManagerTests.Controllers
         }
 
         [Fact]
-        public void PostShouldUpdatePlayer()
+        public void PutShouldUpdatePlayer()
         {
             // Arrange
-            EditPlayerRequest request = new()
+            UpdatePlayerRequest request = new()
             {
                 FirstName = "new",
                 LastName = "new",
@@ -68,7 +68,7 @@ namespace SoccerManagerTests.Controllers
             controller.SetUserEmail(email1);
 
             // Act
-            var response = controller.Post(player1.PlayerId, request);
+            var response = controller.Put(player1.PlayerId, request);
 
             // Assert
             var result = Assert.IsType<OkObjectResult>(response);
@@ -82,13 +82,13 @@ namespace SoccerManagerTests.Controllers
         }
 
         [Fact]
-        public void PostShouldRejectForOtherUserPlayer()
+        public void PutShouldRejectForOtherUserPlayer()
         {
             // Arrange
             controller.SetUserEmail(email1);
 
             // Act
-            var response = controller.Post(player2.PlayerId, new EditPlayerRequest());
+            var response = controller.Put(player2.PlayerId, new UpdatePlayerRequest());
 
             // Assert
             Assert.IsType<ForbidResult>(response);

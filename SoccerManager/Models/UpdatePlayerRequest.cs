@@ -1,6 +1,6 @@
 ﻿namespace SoccerManager.Models
 {
-    public class EditPlayerRequest
+    public class UpdatePlayerRequest
     {
         public string? FirstName { get; set; }
         public string? LastName { get; set; }

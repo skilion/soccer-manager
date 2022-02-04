@@ -28,7 +28,7 @@ namespace SoccerManager.Controllers
         /// Authenticates an user
         /// </summary>
         /// <returns>A JWT bearer token</returns>
-        [HttpPost]
+        [HttpPost(Name = "AuthenticateUser")]
         [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult Authenticate([FromBody] AuthRequest request)
@@ -53,7 +53,7 @@ namespace SoccerManager.Controllers
         /// <remarks>
         /// The user will have a random team generated
         /// </remarks>
-        [HttpPost]
+        [HttpPost(Name = "RegisterUser")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public IActionResult Register([FromBody] RegisterRequest registerRequest)

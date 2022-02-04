@@ -21,7 +21,7 @@ namespace SoccerManager.Controllers
         /// <summary>
         /// Get the team of the team of the current user
         /// </summary>
-        [HttpGet]
+        [HttpGet(Name = "GetTeam")]
         [ProducesResponseType(typeof(Team), 200)]
         public IActionResult Get()
         {
@@ -33,7 +33,7 @@ namespace SoccerManager.Controllers
         /// Updates the details of the team of the current user
         /// </summary>
         /// <returns>The team of the authenticated user</returns>
-        [HttpPost]
+        [HttpPost(Name = "EditTeam")]
         [ProducesResponseType(typeof(Team), 200)]
         public IActionResult Post([FromBody] EditTeamRequest request)
         {

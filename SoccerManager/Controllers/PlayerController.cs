@@ -25,7 +25,7 @@ namespace SoccerManager.Controllers
         /// <summary>
         /// Get the details of a player.
         /// </summary>
-        [HttpGet]
+        [HttpGet(Name = "GetPlayer")]
         [ProducesResponseType(typeof(Player), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Get([FromRoute] int id)
@@ -44,7 +44,7 @@ namespace SoccerManager.Controllers
         /// <remarks>
         /// The player must belong to the user
         /// </remarks>
-        [HttpPost]
+        [HttpPost(Name = "EditPlayer")]
         [ProducesResponseType(typeof(Player), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -82,8 +82,7 @@ namespace SoccerManager.Controllers
         /// The player must be on the market and the user's team must have enough money.
         /// If the user owns the player, the player is simply removed from the market.
         /// </remarks>
-        [HttpPost]
-        [Route("Buy")]
+        [HttpPost("Buy", Name = "BuyPlayer")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -115,8 +114,7 @@ namespace SoccerManager.Controllers
         /// <remarks>
         /// The player must belong to the user's team
         /// </remarks>
-        [HttpPost]
-        [Route("Sell")]
+        [HttpPost("Sell", Name = "SellPlayer")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

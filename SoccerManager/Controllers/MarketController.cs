@@ -20,7 +20,7 @@ namespace SoccerManager.Controllers
         /// <summary>
         /// Get the list of players on the market
         /// </summary>
-        [HttpGet]
+        [HttpGet(Name = "GetMarketList")]
         [ProducesResponseType(typeof(List<Transfer>), StatusCodes.Status200OK)]
         public IActionResult Get()
         {

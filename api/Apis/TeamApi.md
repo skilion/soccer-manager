@@ -5,7 +5,7 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**updateTeam**](TeamApi.md#updateTeam) | **PUT** /Team | Updates the details of the team of the current user
-[**getTeam**](TeamApi.md#getTeam) | **GET** /Team | Get the team of the team of the current user
+[**getTeam**](TeamApi.md#getTeam) | **GET** /Team | Get the team of the current user
 
 
 <a name="updateTeam"></a>
@@ -37,7 +37,7 @@ Name | Type | Description  | Notes
 # **getTeam**
 > Team getTeam()
 
-Get the team of the team of the current user
+Get the team of the current user
 
 ### Parameters
 This endpoint does not need any parameter.

@@ -19,7 +19,7 @@ namespace SoccerManager.Controllers
         }
 
         /// <summary>
-        /// Get the team of the team of the current user
+        /// Get the team of the current user
         /// </summary>
         [HttpGet(Name = "GetTeam")]
         [ProducesResponseType(typeof(Team), 200)]

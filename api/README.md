@@ -13,7 +13,7 @@ Class | Method | HTTP request | Description
 *PlayerApi* | [**getPlayer**](Apis/PlayerApi.md#getplayer) | **GET** /Player/{id} | Get the details of a player
 *PlayerApi* | [**sellPlayer**](Apis/PlayerApi.md#sellplayer) | **POST** /Player/{id}/Sell | Puts a player on the market
 *TeamApi* | [**updateTeam**](Apis/TeamApi.md#updateteam) | **PUT** /Team | Updates the details of the team of the current user
-*TeamApi* | [**getTeam**](Apis/TeamApi.md#getteam) | **GET** /Team | Get the team of the team of the current user
+*TeamApi* | [**getTeam**](Apis/TeamApi.md#getteam) | **GET** /Team | Get the team of the current user
 *UserApi* | [**authenticateUser**](Apis/UserApi.md#authenticateuser) | **POST** /User/Authenticate | Authenticates an user
 *UserApi* | [**registerUser**](Apis/UserApi.md#registeruser) | **POST** /User/Register | Creates a new user
 

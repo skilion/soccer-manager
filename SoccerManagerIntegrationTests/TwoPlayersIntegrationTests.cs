@@ -37,8 +37,12 @@ namespace SoccerManagerIntegrationTests
             var teamAfter2 = await GetTeam(token2);
             Assert.Equal(team1.Money + price1 - price2, teamAfter1.Money);
             Assert.Equal(team2.Money - price1 + price2, teamAfter2.Money);
-            Assert.Single(teamAfter1.Players.Where(player => player.PlayerId == team2.Players.First().PlayerId));
-            Assert.Single(teamAfter2.Players.Where(player => player.PlayerId == team1.Players.First().PlayerId));
+            var playerAfter1 = teamAfter1.Players.Where(player => player.PlayerId == team2.Players.First().PlayerId);
+            var playerAfter2 = teamAfter2.Players.Where(player => player.PlayerId == team1.Players.First().PlayerId);
+            Assert.Single(playerAfter1);
+            Assert.Single(playerAfter2);
+            Assert.True(playerAfter1.Single().Value > 1_000_000);
+            Assert.True(playerAfter2.Single().Value > 1_000_000);
         }
 
         private async Task CreateUsers()
